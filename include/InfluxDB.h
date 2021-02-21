@@ -36,6 +36,10 @@ class InfluxDB
     /// \param metric
     void write(Point&& metric);
 
+    /// Writes a metric
+    /// \param metric
+    void write(const Point& metric);
+
     /// Queries InfluxDB database
     std::vector<Point> query(const std::string& query);
 

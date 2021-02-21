@@ -77,6 +77,18 @@ void InfluxDB::write(Point&& metric)
   }
 }
 
+void InfluxDB::write(const Point& metric)
+{
+  if (mBuffering) {
+    mBuffer.emplace_back(metric.toLineProtocol());
+    if (mBuffer.size() >= mBufferSize) {
+      flushBuffer();
+    }
+  } else {
+    transmit(metric.toLineProtocol());
+  }
+}
+
 #ifdef INFLUXDB_WITH_BOOST
 std::vector<Point> InfluxDB::query(const std::string&  query)
 {
